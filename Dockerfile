@@ -11,6 +11,8 @@ RUN apt update && \
     chown -R sduser:sdgroup /app && \
     chmod +x /app/entrypoint.sh
 
+RUN python3 -m pip install --upgrade fastapi=0.90.1
+
 USER sduser
 WORKDIR /app
 
@@ -21,9 +23,11 @@ VOLUME /app/stable-diffusion-webui/models
 VOLUME /app/stable-diffusion-webui/outputs
 VOLUME /app/stable-diffusion-webui/localizations
 
+RUN /app/stable-diffusion-webui/webui.sh --update-check --no-half --no-haf-vae --xformers --skip-torch-cuda-test --enable-insecure-extension-access --exit
+
 EXPOSE 8080
 
 ENV PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
 
-ENTRYPOINT ["/app/entrypoint.sh", "--update-check", "--xformers", "--listen", "--port", "8080"]
+ENTRYPOINT ["/app/entrypoint.sh", "--update-check", "--no-half", "--no-haf-vae", "--xformers", "--enable-insecure-extension-access", "--listen", "--port", "8080"]
 CMD ["--medvram"]
