@@ -3,7 +3,7 @@ FROM universonic/cuda:11.7.1-ubuntu2210-base
 COPY entrypoint.sh /app/entrypoint.sh
 
 RUN apt update && \
-    apt install -y python3 python3-pip python3-venv git wget libgl1-mesa-dev libglib2.0-0 libsm6 libxrender1 libxext6 && \
+    apt install -y nano net-tools python3 python3-pip python3-venv git wget libgl1-mesa-dev libglib2.0-0 libsm6 libxrender1 libxext6 && \
     rm -rf /var/lib/apt/lists/* && \
     groupadd -g 1000 sdgroup && \
     useradd -m -s /bin/bash -u 1000 -g 1000 --home /app sduser && \
@@ -11,7 +11,7 @@ RUN apt update && \
     chown -R sduser:sdgroup /app && \
     chmod +x /app/entrypoint.sh
 
-RUN python3 -m pip install --upgrade fastapi=0.90.1
+RUN python3 -m pip install --upgrade fastapi==0.90.1
 
 USER sduser
 WORKDIR /app
