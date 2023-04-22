@@ -22,12 +22,14 @@ VOLUME /app/stable-diffusion-webui/extensions
 VOLUME /app/stable-diffusion-webui/models
 VOLUME /app/stable-diffusion-webui/outputs
 VOLUME /app/stable-diffusion-webui/localizations
-
-RUN /app/stable-diffusion-webui/webui.sh --update-check --no-half --no-haf-vae --xformers --skip-torch-cuda-test --enable-insecure-extension-access --exit
+VOLUME /app/stable-diffusion-webui/venv
+VOLUME /app/.cache
+VOLUME /app/.config
+VOLUME /app/.nv
 
 EXPOSE 8080
 
 ENV PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:512
 
-ENTRYPOINT ["/app/entrypoint.sh", "--update-check", "--no-half", "--no-haf-vae", "--xformers", "--enable-insecure-extension-access", "--listen", "--port", "8080"]
+ENTRYPOINT ["/app/entrypoint.sh", "--precision", "full", "--no-half", "--update-check", "--xformers", "--enable-insecure-extension-access", "--listen", "--port", "8080"]
 CMD ["--medvram"]
